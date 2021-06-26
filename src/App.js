@@ -1,24 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Layout } from "./components/Layout";
+import { GridSuperheroes } from "./components/GridSuperheroes";
+import imageSuperheroe from "../src/images/img-super.jpeg";
 
 function App() {
+  const [superheroes, setSuperheroes] = useState([]);
+
+  useEffect(() => {
+    getSuperheroes();
+  }, []);
+
+  const getSuperheroes = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://www.superheroapi.com/api.php/4284567481606325/search/%20`
+      );
+      setSuperheroes(data.results);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const checkUrlImage = (url) => {
+    var img = new Image();
+    img.src = url;
+    if (img.height === 0) {
+      return imageSuperheroe;
+    } else {
+      return url;
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <GridSuperheroes data={superheroes} checkUrlImage={checkUrlImage} />
+    </Layout>
   );
 }
 

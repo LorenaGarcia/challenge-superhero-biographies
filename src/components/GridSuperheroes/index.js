@@ -1,0 +1,1 @@
+export { GridSuperheroes } from "./GridSuperheroes";
